@@ -1,11 +1,13 @@
 "use client";
 import Navbar from "@/components/Navbar";
-import { useState } from "react";
+import useNoteStore from "@/store/useNotesStore";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Home() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const setLengthOfAllNotesInStore = useNoteStore((state) => state.setNotes)
   const handleSaveNote = async () => {
     const response = await fetch("/api/note", {
       method: "POST",
@@ -28,6 +30,14 @@ export default function Home() {
       })
     }
   };
+  useEffect(() => {
+    const fetchNotesLength = async() => {
+      const response = await fetch('/api/notes');
+      const data = await response.json();
+      setLengthOfAllNotesInStore(data.allNote)
+    }
+    fetchNotesLength()
+  } , [])
   return (
     <>
       <div className="flex flex-col min-h-screen w-full max-w-7xl mx-auto">
