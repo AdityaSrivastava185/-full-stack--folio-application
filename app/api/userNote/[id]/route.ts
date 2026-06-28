@@ -1,5 +1,6 @@
 import { ConnectDB } from "@/lib/ConnectDB";
 import Note from "@/model/note.model";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 interface paramsprops {
@@ -31,10 +32,19 @@ export async function GET(req: NextRequest , { params } : paramsprops) {
 export async function PATCH(req :  NextRequest , {params} : paramsprops){
     try{
         await ConnectDB();
+        const {userId} = await auth()
+        if(!userId) {
+            return NextResponse.json({
+                success : false,
+                message : "Please sign in to continue"
+            } , {
+                status : 401
+            })
+        }
         const {id} = await params;
         const body = await req.json();
         const {title , description} = await body;
-        const updateNote = await Note.findByIdAndUpdate(id , {title , description} , {new:true});
+        const updateNote = await Note.findByIdAndUpdate({_id : id , userId : userId} , {title , description} , {new:true});
         return NextResponse.json({
             success:true,
             message:"Note has been updated successfully",
@@ -52,8 +62,20 @@ export async function PATCH(req :  NextRequest , {params} : paramsprops){
 export async function DELETE(req : NextRequest , {params} : paramsprops){
     try{
         await ConnectDB();
+        const {userId} = await auth();
+        if(!userId) {
+            return NextResponse.json({
+                success : false,
+                message : "Please sign in to continue"
+            } , {
+                status : 401
+            })
+        }
         const {id} = await params;
-        const deleteNote = await Note.findByIdAndDelete(id);
+        const deleteNote = await Note.findByIdAndDelete({
+            _id : id,
+            userId : userId
+        });
         return NextResponse.json({
             success:true,
             message:"Note deleted successfully",

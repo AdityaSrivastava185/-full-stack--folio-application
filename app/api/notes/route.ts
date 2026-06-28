@@ -1,11 +1,21 @@
 import { ConnectDB } from "@/lib/ConnectDB";
 import Note from "@/model/note.model";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function GET(){
     try{
         await ConnectDB()
-        const allNote = await Note.find({userId : 'temp-user-id'})
+        const {userId} = await auth();
+        if(!userId){
+            NextResponse.json({
+                success : false,
+                message : "please sign in to continue",
+            } , {
+                status : 401
+            })
+        }
+        const allNote = await Note.find({userId : userId})
         return NextResponse.json({
             success : true,
             message : "All notes fetched successully",

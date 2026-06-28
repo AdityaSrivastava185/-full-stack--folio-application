@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import useNoteStore from "@/store/useNotesStore";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 interface buttonProp {
   onSave: () => void;
@@ -23,6 +24,16 @@ const Navbar = ({ onSave }: buttonProp) => {
             </Link>
           </div>
           <div className="flex gap-7">
+             <Show when="signed-out">
+              <SignInButton>
+                <Button className="rounded-md px-4 py-2 text-sm font-medium cursor-pointer">
+                  Sign In
+                </Button>
+              </SignInButton>
+            </Show>
+             <Show when="signed-in">
+              <UserButton />
+            </Show>
             {lengthOfNotes > 0 && (
               <Link
                 href={"/notes"}
@@ -32,9 +43,9 @@ const Navbar = ({ onSave }: buttonProp) => {
               </Link>
             )}
             <Button
-              variant="default"
+              variant="secondary"
               onClick={onSave}
-              className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background cursor-pointer"
+              className="rounded-md px-4 py-2 text-sm font-medium cursor-pointer"
             >
               Save
             </Button>
