@@ -1,10 +1,12 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import useNoteStore from "@/store/useNotesStore";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Home() {
+  const route = useRouter()
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const setLengthOfAllNotesInStore = useNoteStore((state) => state.setNotes)
@@ -24,6 +26,7 @@ export default function Home() {
       })
       setTitle(""),
       setDescription("")
+      route.push("/")
     } else {
       toast.error(data.message , {
         position : "bottom-center"
@@ -37,7 +40,7 @@ export default function Home() {
       setLengthOfAllNotesInStore(data.allNote)
     }
     fetchNotesLength()
-  } , [])
+  } , [handleSaveNote])
   return (
     <>
       <div className="flex flex-col min-h-screen w-full max-w-7xl mx-auto">

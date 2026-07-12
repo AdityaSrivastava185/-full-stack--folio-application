@@ -2,7 +2,6 @@
 
 import Navbar from "@/components/Navbar";
 import useNoteStore from "@/store/useNotesStore";
-import { Building2, Code2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -24,9 +23,10 @@ const NotesPage = () => {
       const data = await response.json();
       setNotes(data.allNote);
       AllNotesInStore(data.allNote);
+
     };
     getNotes();
-  }, [AllNotesInStore]);
+  }, [setNotes , AllNotesInStore]);
 
   return (
     <div className="max-w-7xl w-full mx-auto">

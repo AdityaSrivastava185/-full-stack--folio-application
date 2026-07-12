@@ -73,8 +73,8 @@ export async function DELETE(req : NextRequest , {params} : paramsprops){
         }
         const {id} = await params;
         const deleteNote = await Note.findByIdAndDelete({
-            _id : id,
-            userId : userId
+            _id : id, // notes id 
+            userId : userId // user id
         });
         return NextResponse.json({
             success:true,
