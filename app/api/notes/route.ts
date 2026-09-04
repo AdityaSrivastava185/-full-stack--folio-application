@@ -8,7 +8,7 @@ export async function GET(){
         await ConnectDB()
         const {userId} = await auth();
         if(!userId){
-            NextResponse.json({
+            return NextResponse.json({
                 success : false,
                 message : "please sign in to continue",
             } , {

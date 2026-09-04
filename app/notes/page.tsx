@@ -38,7 +38,7 @@ const NotesPage = () => {
             }
           </div>
         <main className="grid max-w-5xl grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 mt-7">
-          {notes.map((note, index) => {
+          {notes.map((note) => {
             return (
                 <Link
                   href={note?._id ? `/note/${note._id}` : "/notes"}

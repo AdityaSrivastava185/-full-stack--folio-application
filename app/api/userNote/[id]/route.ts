@@ -42,16 +42,15 @@ export async function PATCH(req :  NextRequest , {params} : paramsprops){
             })
         }
         const {id} = await params;
-        const body = await req.json();
-        const {title , description} = await body;
+        const {title, description} = await req.json();
+        // const {title , description} = await body;
         const updateNote = await Note.findByIdAndUpdate({_id : id , userId : userId} , {title , description} , {new:true});
         return NextResponse.json({
             success:true,
             message:"Note has been updated successfully",
-            updateNote
         } , {status : 200})
     } catch (error){
-        NextResponse.json({
+        return NextResponse.json({
             success:false,
             message:"Error while updating the note"
         },{status : 500})
